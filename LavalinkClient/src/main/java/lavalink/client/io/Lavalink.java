@@ -43,11 +43,7 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.function.Function;
 
 public class Lavalink extends ListenerAdapter {
@@ -94,7 +90,11 @@ public class Lavalink extends ListenerAdapter {
     }
 
     public Link getLink(String guildId) {
-        return links.computeIfAbsent(guildId, __ -> new Link(this, guildId));
+        return links.computeIfAbsent(guildId, __ -> new Link(this, guildId, false));
+    }
+
+    public Link getLink(String guildId, boolean selfDeaf) {
+        return links.computeIfAbsent(guildId, __ -> new Link(this, guildId, selfDeaf));
     }
 
     public LavalinkLoadBalancer getLoadBalancer() {
@@ -103,7 +103,12 @@ public class Lavalink extends ListenerAdapter {
 
     @SuppressWarnings("WeakerAccess")
     public Link getLink(Guild guild) {
-        return getLink(guild.getId());
+        return getLink(guild.getId(), false);
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public Link getLink(Guild guild, boolean selfDeaf) {
+        return getLink(guild.getId(), selfDeaf);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -203,7 +208,7 @@ public class Lavalink extends ListenerAdapter {
     public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
         // Check if not ourselves
         if (!event.getMember().getUser().equals(event.getJDA().getSelfUser())) return;
-        
+
         getLink(event.getGuild()).onVoiceJoin();
     }
 

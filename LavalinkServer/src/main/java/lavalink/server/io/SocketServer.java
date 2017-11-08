@@ -124,6 +124,7 @@ public class SocketServer extends WebSocketServer {
                     log.info("Closing the audio connection for guild {} so we can reconnect.", guildId);
                 }
 
+                manager.setSelfDeafened(json.getBoolean("self_deaf"));
                 manager.openAudioConnection(json.getString("channelId"));
                 break;
             case "voiceUpdate":

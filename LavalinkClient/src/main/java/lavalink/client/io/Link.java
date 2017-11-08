@@ -78,9 +78,12 @@ public class Link {
     private final AtomicInteger disconnectCounter = new AtomicInteger(0);
     private final AtomicInteger connectCounter = new AtomicInteger(0);
 
-    Link(Lavalink lavalink, String guildId) {
+    private boolean self_deaf;
+
+    Link(Lavalink lavalink, String guildId, boolean self_deaf) {
         this.lavalink = lavalink;
         this.guild = guildId;
+        this.self_deaf = self_deaf;
     }
 
     public LavalinkPlayer getPlayer() {
@@ -155,6 +158,7 @@ public class Link {
         json.put("op", "connect");
         json.put("guildId", channel.getGuild().getId());
         json.put("channelId", channel.getId());
+        json.put("self_deaf", self_deaf);
         currentNode.send(json.toString());
     }
 
