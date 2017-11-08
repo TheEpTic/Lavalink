@@ -109,6 +109,14 @@ public class SocketContext {
         return newList;
     }
 
+    void destroyPlayer(String guildId) {
+        if (players.get(guildId) == null)
+            return;
+
+        players.get(guildId).destroy();
+        players.remove(guildId);
+    }
+
     void shutdown() {
         log.info("Shutting down " + cores.size() + " cores and " + getPlayingPlayers().size() + " playing players.");
         statsExecutor.shutdown();

@@ -134,6 +134,7 @@ public class SocketServer extends WebSocketServer {
                 );
                 break;
             case "disconnect":
+                contextMap.get(webSocket).destroyPlayer(json.getString("guildId"));
                 contextMap.get(webSocket).getCore(getShardId(webSocket, json)).getAudioManager(json.getString("guildId"))
                         .closeAudioConnection();
                 break;

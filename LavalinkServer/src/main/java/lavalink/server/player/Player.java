@@ -155,6 +155,10 @@ public class Player extends AudioEventAdapter implements AudioSendHandler {
         return player.getPlayingTrack() != null && !player.isPaused();
     }
 
+    public void destroy() {
+        player.destroy();
+    }
+
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         myFuture.cancel(false);

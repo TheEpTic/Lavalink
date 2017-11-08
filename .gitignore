@@ -9,3 +9,5 @@ build/*
 *.jar
 
 LavalinkServer/src/main/resources/application\.yml\.personal
+
+*.class
