@@ -54,7 +54,7 @@ public class Link {
     private volatile LavalinkSocket node = null;
     /* May only be set by setState() */
     private volatile State state = State.NOT_CONNECTED;
-    
+
     Link(Lavalink lavalink, String guildId) {
         this.lavalink = lavalink;
         this.guild = Long.parseLong(guildId);

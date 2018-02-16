@@ -117,10 +117,8 @@ public class Lavalink extends ListenerAdapter {
         node.close();
     }
 
-    public Link getLink(String guildId) {
-        return links.computeIfAbsent(guildId, __ -> new Link(this, guildId));
-    }
-
+    @SuppressWarnings("unused")
+    @Nonnull
     public LavalinkLoadBalancer getLoadBalancer() {
         return loadBalancer;
     }
@@ -134,12 +132,7 @@ public class Lavalink extends ListenerAdapter {
     @SuppressWarnings("WeakerAccess")
     @Nonnull
     public Link getLink(Guild guild) {
-        return getLink(guild.getId(), false);
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    public Link getLink(Guild guild, boolean selfDeaf) {
-        return getLink(guild.getId(), selfDeaf);
+        return getLink(guild.getId());
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -201,12 +194,9 @@ public class Lavalink extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
-        // Check if not ourselves
-        if (!event.getMember().getUser().equals(event.getJDA().getSelfUser())) return;
-        
-        getLink(event.getGuild()).onVoiceJoin();
-    }
+    public void onVoiceChannelDelete(VoiceChannelDeleteEvent event) {
+        Link link = links.get(event.getGuild().getId());
+        if (link == null || !event.getChannel().equals(link.getLastChannel())) return;
 
         link.removeConnection();
     }
