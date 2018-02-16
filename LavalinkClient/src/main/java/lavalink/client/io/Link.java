@@ -54,12 +54,10 @@ public class Link {
     private volatile LavalinkSocket node = null;
     /* May only be set by setState() */
     private volatile State state = State.NOT_CONNECTED;
-
-    Link(Lavalink lavalink, String guildId, boolean self_deaf) {
-    private boolean self_deaf;
+    
+    Link(Lavalink lavalink, String guildId) {
         this.lavalink = lavalink;
-        this.guild = guildId;
-        this.self_deaf = self_deaf;
+        this.guild = Long.parseLong(guildId);
     }
 
     public LavalinkPlayer getPlayer() {
@@ -123,11 +121,8 @@ public class Link {
         getMainWs().queueAudioConnect(channel);
     }
 
-        JSONObject json = new JSONObject();
-        json.put("op", "connect");
-        json.put("guildId", channel.getGuild().getId());
-        json.put("channelId", channel.getId());
-        currentNode.send(json.toString());
+    public void connect(VoiceChannel voiceChannel) {
+        connect(voiceChannel, true);
     }
 
     public void disconnect() {
@@ -212,9 +207,12 @@ public class Link {
     /**
      * @return The channel we are currently connect to
      */
-    private void forcefullyDisconnect() {
-        ((JDAImpl) getJda()).getClient()
-                .send("{\"op\":4,\"d\":{\"self_deaf\":false,\"guild_id\":\"" + guild + "\",\"channel_id\":null,\"self_mute\":false}}");
+    @SuppressWarnings({"WeakerAccess", "unused"})
+    @Nullable
+    public VoiceChannel getChannel() {
+        if (channel == null || state == State.DESTROYED || state == State.NOT_CONNECTED) return null;
+
+        return getJda().getVoiceChannelById(channel);
     }
 
     /**
