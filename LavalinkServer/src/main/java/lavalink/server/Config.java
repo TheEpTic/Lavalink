@@ -47,16 +47,19 @@ public class Config {
         this.password = password;
     }
 
+    @Nullable
     private String sentryDsn;
 
+    @Nullable
     public String getSentryDsn() {
         return sentryDsn;
     }
 
-    public void setSentryDsn(String sentryDsn) {
+    public void setSentryDsn(@Nullable String sentryDsn) {
         this.sentryDsn = sentryDsn;
     }
 
+    @SuppressWarnings("WeakerAccess")
     @Nullable
     public Integer bufferDurationMs;
 
@@ -67,6 +70,18 @@ public class Config {
 
     public void setBufferDurationMs(@Nullable Integer bufferDurationMs) {
         this.bufferDurationMs = bufferDurationMs;
+    }
+
+    @Nullable
+    private Integer youtubePlaylistLoadLimit;
+
+    @Nullable
+    public Integer getYoutubePlaylistLoadLimit() {
+        return youtubePlaylistLoadLimit;
+    }
+
+    public void setYoutubePlaylistLoadLimit(@Nullable Integer youtubePlaylistLoadLimit) {
+        this.youtubePlaylistLoadLimit = youtubePlaylistLoadLimit;
     }
 
     public static class Sources {
